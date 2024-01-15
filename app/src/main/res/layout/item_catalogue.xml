@@ -1,0 +1,26 @@
+<!-- item_catalogue.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/catalogueNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/white"
+        android:alpha="0.5"
+        android:textSize="20sp"
+        android:textStyle="normal" />
+
+    <View
+        android:id="@+id/indicatorView"
+        android:layout_width="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_height="2dp"
+        android:layout_marginRight="5dp"
+        android:background="#FFFFCC" />
+
+</LinearLayout>
