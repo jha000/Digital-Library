@@ -53,6 +53,11 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,7 +102,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="@color/dark_blue"
+                android:backgroundTint="@color/black"
                 android:padding="10dp"
                 android:text="Edit Profile"
                 android:textAllCaps="false"
@@ -282,6 +287,8 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </ScrollView>
 

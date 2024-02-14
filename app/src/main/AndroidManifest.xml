@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
         android:allowBackup="true"
@@ -16,14 +17,14 @@
         android:theme="@style/Theme.DigitalLibraray"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.OpenCat"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:name=".Registration"
+            android:exported="false" />
         <activity
-            android:name=".Activities.openCategories"
+            android:name=".Activities.Authentication"
+            android:exported="false"
+            android:theme="@style/Theme.WhiteStatusBar" />
+        <activity
+            android:name=".Activities.OpenCat"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -44,14 +45,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.Dashboard"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.Dashboard"
+            android:name=".Activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

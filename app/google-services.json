@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584295219850",
+    "project_id": "digital-library-6fe4d",
+    "storage_bucket": "digital-library-6fe4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584295219850:android:bdc231c246289a92082373",
+        "android_client_info": {
+          "package_name": "com.wbsl.digitallibraray"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIEd5CYQHtYOvOPaU_kDFuV0lmvD4z-No"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
