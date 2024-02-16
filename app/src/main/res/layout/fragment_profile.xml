@@ -58,13 +58,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="false"
+                android:visibility="visible"
+                app:lottie_rawRes="@raw/profileloading" />
+
             <LinearLayout
                 android:id="@+id/authLayout"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:layout_width="match_parent"
@@ -133,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
 
                 >
 
@@ -151,37 +160,51 @@
                     tools:ignore="MissingConstraints" />
 
                 <TextView
-                    android:id="@+id/username1"
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:hint="User"
+                    android:hint=""
                     android:text=""
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
-
-                    android:textSize="18dp"
+                    android:letterSpacing="0.1"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
-                <Button
-                    android:id="@+id/editProfile"
-                    android:layout_width="150dp"
+                <LinearLayout
+                    android:id="@+id/editLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="@color/black"
+                    android:gravity="center"
                     android:padding="10dp"
-                    android:text="Edit Profile"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="50dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/email" />
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/editbac"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Profile"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/white"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/edit"
+                        android:layout_marginEnd="10dp"
+                        app:tint="@color/white"/>
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -191,6 +214,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editProfile">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#33403E3A" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -202,7 +233,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/circle"
+                            android:background="@drawable/circle2"
                             android:padding="8dp"
                             android:src="@drawable/profile"
                             app:tint="@color/white" />
@@ -214,7 +245,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
                             android:gravity="left"
-                            android:text="Name"
+                            android:text=""
                             android:textColor="@color/black"
                             android:textSize="16sp" />
 
@@ -231,9 +262,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/circle"
+                            android:background="@drawable/circle2"
                             android:padding="8dp"
-                            android:src="@drawable/email"
+                            android:src="@drawable/phone"
                             app:tint="@color/white" />
 
                         <TextView
@@ -243,9 +274,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
                             android:gravity="left"
-                            android:text="Phone no"
+                            android:text=""
                             android:textColor="@color/black"
-
                             android:textSize="16sp" />
 
 
@@ -262,7 +292,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/circle"
+                            android:background="@drawable/circle2"
                             android:padding="8dp"
                             android:src="@drawable/profile"
                             app:tint="@color/white" />
@@ -284,36 +314,57 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/constraintLayout2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="MissingConstraints">
 
                         <ImageView
+                            android:id="@+id/locationid"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/circle"
+                            android:background="@drawable/circle2"
                             android:padding="8dp"
-                            android:src="@drawable/setting"
-                            app:tint="@color/white" />
+                            android:src="@drawable/location"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/channel1"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
-                            android:gravity="left"
-                            android:text="Settings"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/pincode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="12sp"
+                                 />
+
+                            <TextView
+                                android:id="@+id/address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
 
 
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="2dp"
@@ -331,14 +382,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/circle"
+                            android:background="@drawable/circle2"
                             android:padding="8dp"
                             android:src="@drawable/logout"
                             app:tint="@color/white" />
 
                         <TextView
                             android:id="@+id/logout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"

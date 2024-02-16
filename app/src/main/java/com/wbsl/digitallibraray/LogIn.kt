@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -75,7 +76,16 @@ class LogIn : AppCompatActivity() {
                     // User does not exist, display error message
                     progressBar.visibility = View.GONE
                     sendOTP.visibility = View.VISIBLE
-                    Toast.makeText(this@LogIn, "This phone number is not registered. Please sign up first.", Toast.LENGTH_SHORT).show()
+
+                    // User does not exists, display alert dialog
+                    AlertDialog.Builder(this@LogIn)
+                        .setTitle("Account not found")
+                        .setMessage("This phone number is not registered. Please sign up first.")
+                        .setPositiveButton("Sign up") { dialog, _ ->
+                            finish()
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
                 }
             }
 

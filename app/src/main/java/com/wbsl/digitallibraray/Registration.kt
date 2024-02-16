@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -24,6 +25,10 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.io.IOException
 import java.util.Locale
 
@@ -82,8 +87,12 @@ class Registration : AppCompatActivity() {
 
         save.setOnClickListener {
 
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(
+                currentFocus?.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
 
 
             // Check if all mandatory fields are empty
@@ -129,7 +138,7 @@ class Registration : AppCompatActivity() {
 
                 progressbar.visibility = View.VISIBLE
                 save.visibility = View.GONE
-                sendVerificationCode(formattedPhoneNumber)
+                checkPhoneNo(formattedPhoneNumber)
             } else {
                 phone.error = "Enter a valid 10-digit phone number"
                 phone.requestFocus()
@@ -142,6 +151,42 @@ class Registration : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun checkPhoneNo(phoneNumber: String) {
+        val usersRef = FirebaseDatabase.getInstance().getReference("Users").child(phoneNumber)
+        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    progressbar.visibility = View.GONE
+                    save.visibility = View.VISIBLE
+
+                    // User already exists, display alert dialog
+                    AlertDialog.Builder(this@Registration)
+                        .setTitle("Account Exists")
+                        .setMessage("An account with this phone number already exists. Please log in instead.")
+                        .setPositiveButton("Log In") { dialog, _ ->
+                            finish()
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                } else {
+                    // User does not exist, proceed with registration
+                    sendVerificationCode(phoneNumber)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+                Toast.makeText(
+                    this@Registration,
+                    "Database Error: ${databaseError.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
 
     private fun sendVerificationCode(phoneNumber: String) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(

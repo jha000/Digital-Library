@@ -18,7 +18,10 @@ import com.chaos.view.PinView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.wbsl.digitallibraray.Activities.Dashboard
 
 class VerifyOtp : AppCompatActivity() {
@@ -97,45 +100,59 @@ class VerifyOtp : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
 
-                    layoutOtp.visibility = View.GONE
-                    lottie.visibility = View.VISIBLE
-
-                    // Save user details to Firebase Realtime Database
                     val userNumber = FirebaseAuth.getInstance().currentUser?.phoneNumber ?: ""
-                    val userRef =
-                        FirebaseDatabase.getInstance().getReference("Users").child(userNumber)
+                    val userRef = FirebaseDatabase.getInstance().getReference("Users")
 
-                    val userMap = HashMap<String, String>()
-                    userMap["name"] = name
-                    userMap["phone"] = phone
-                    userMap["address"] = address
-                    userMap["address2"] = address2
-                    userMap["state"] = state
-                    userMap["pincode"] = pincode
+                    // Check if user phone number already exists in the database
+                    userRef.child(userNumber).addListenerForSingleValueEvent(object :
+                        ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                // User phone number already exists, no need to update details
+                                // Launch Dashboard activity directly
+                                val i = Intent(this@VerifyOtp, Dashboard::class.java)
+                                startActivity(i)
+                                finish()
+                            } else {
+                                // User phone number does not exist, update details and launch Dashboard activity
+                                layoutOtp.visibility = View.GONE
+                                lottie.visibility = View.VISIBLE
 
-                    userRef.setValue(userMap)
-                        .addOnSuccessListener {
-                            // Launch Dashboard activity
+                                val userMap = HashMap<String, String>()
+                                userMap["name"] = name
+                                userMap["phone"] = phone
+                                userMap["address"] = address
+                                userMap["address2"] = address2
+                                userMap["state"] = state
+                                userMap["pincode"] = pincode
 
-                            lottie.addAnimatorListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationEnd(animation: Animator) {
-                                    // Add your code here for animation end
-                                    // Launch Dashboard activity
-                                    val i = Intent(this@VerifyOtp, Dashboard::class.java)
-                                    startActivity(i)
-                                    finish()
-                                }
-                            })
-
+                                userRef.child(userNumber).setValue(userMap)
+                                    .addOnSuccessListener {
+                                        // Launch Dashboard activity after saving details
+                                        lottie.addAnimatorListener(object : AnimatorListenerAdapter() {
+                                            override fun onAnimationEnd(animation: Animator) {
+                                                val i = Intent(this@VerifyOtp, Dashboard::class.java)
+                                                startActivity(i)
+                                                finish()
+                                            }
+                                        })
+                                    }
+                                    .addOnFailureListener { e ->
+                                        // Handle the error
+                                        Toast.makeText(
+                                            this@VerifyOtp,
+                                            "Failed to save user details: ${e.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                            }
                         }
-                        .addOnFailureListener { e ->
-                            // Handle the error
-                            Toast.makeText(
-                                this,
-                                "Failed to save user details: ${e.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // Handle error
                         }
+                    })
+
                 } else {
                     // Show error message for invalid OTP
                     Toast.makeText(this, "Invalid OTP. Please try again.", Toast.LENGTH_SHORT)
@@ -143,6 +160,7 @@ class VerifyOtp : AppCompatActivity() {
                 }
             }
     }
+
 
 
 }
