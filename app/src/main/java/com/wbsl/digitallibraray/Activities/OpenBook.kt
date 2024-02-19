@@ -21,8 +21,13 @@ class OpenBook : AppCompatActivity() {
         setContentView(R.layout.activity_open_book)
 
         val back = findViewById<ImageView>(R.id.back)
+        val back1 = findViewById<TextView>(R.id.back1)
 
         back.setOnClickListener(View.OnClickListener {
+            super.onBackPressed()
+        })
+
+        back1.setOnClickListener(View.OnClickListener {
             super.onBackPressed()
         })
 
@@ -46,7 +51,7 @@ class OpenBook : AppCompatActivity() {
         val getPages = findViewById<TextView>(R.id.getPages)
         val getYear = findViewById<TextView>(R.id.getYear)
         val getSubject = findViewById<TextView>(R.id.subject)
-        val open = findViewById<LinearLayout>(R.id.open)
+        val open = findViewById<LinearLayout>(R.id.show)
 
 
         open.setOnClickListener {

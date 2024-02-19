@@ -1,4 +1,4 @@
-package com.wbsl.digitallibraray
+package com.wbsl.digitallibraray.Activities
 
 import android.content.Context
 import android.content.Intent
@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.wbsl.digitallibraray.R
 import java.util.regex.Pattern
 
 class LogIn : AppCompatActivity() {

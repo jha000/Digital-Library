@@ -1,12 +1,14 @@
-package com.wbsl.digitallibraray.Activities
+package com.wbsl.digitallibraray.Fragments
 
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +22,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private val books = mutableListOf<Book>()
     private lateinit var searchAdapter: SearchAdapter
@@ -40,23 +42,24 @@ class SearchActivity : AppCompatActivity() {
     private val apiService = retrofit.create(ApiService::class.java)
 
     @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_search)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_search, container, false)
 
         // Initialize RecyclerView
-        val searchRecyclerView: RecyclerView = findViewById(R.id.searchRecyclerView)
-        val searchView: SearchView = findViewById(R.id.searchView)
+        val searchRecyclerView: RecyclerView = view.findViewById(R.id.searchRecyclerView)
+        val searchView: SearchView = view.findViewById(R.id.searchView)
 
-        showAnim= findViewById(R.id.showAnim)
-        showAnim1= findViewById(R.id.showAnim1)
+        showAnim = view.findViewById(R.id.showAnim)
+        showAnim1 = view.findViewById(R.id.showAnim1)
 
-        searchView.requestFocus()
 
-        searchAdapter = SearchAdapter(this, books)
+        searchAdapter = SearchAdapter(requireContext(), books)
         searchRecyclerView.adapter = searchAdapter
-        searchRecyclerView.layoutManager = LinearLayoutManager(this)
+        searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Set up a listener for the search view
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -72,6 +75,8 @@ class SearchActivity : AppCompatActivity() {
                 return true
             }
         })
+
+        return view
     }
 
     private fun performSearch() {
@@ -106,5 +111,4 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
-
 }

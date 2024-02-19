@@ -15,7 +15,7 @@
         android:background="@color/bac"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="150dp"

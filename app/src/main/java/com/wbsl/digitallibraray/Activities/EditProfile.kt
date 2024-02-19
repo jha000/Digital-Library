@@ -1,4 +1,4 @@
-package com.wbsl.digitallibraray
+package com.wbsl.digitallibraray.Activities
 
 import android.Manifest
 import android.content.Intent
@@ -18,7 +18,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.wbsl.digitallibraray.Activities.Dashboard
+import com.wbsl.digitallibraray.R
 import java.io.IOException
 import java.util.Locale
 
@@ -36,6 +36,7 @@ class EditProfile : AppCompatActivity() {
     private lateinit var save: Button
     private lateinit var back: ImageView
     private lateinit var current: TextView
+    private lateinit var manually: TextView
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val REQUEST_CODE = 100
 
@@ -57,6 +58,7 @@ class EditProfile : AppCompatActivity() {
         save = findViewById(R.id.save)
         back = findViewById(R.id.back)
         current = findViewById(R.id.current)
+        manually = findViewById(R.id.manually)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         name.setText(getName)
@@ -70,6 +72,12 @@ class EditProfile : AppCompatActivity() {
 
         current.setOnClickListener {
             getLastLocation()
+        }
+
+        manually.setOnClickListener {
+            address.text.clear()
+            state.text.clear()
+            pincode.text.clear()
         }
 
         save.setOnClickListener {

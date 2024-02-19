@@ -1,4 +1,4 @@
-package com.wbsl.digitallibraray
+package com.wbsl.digitallibraray.Activities
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -22,7 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.wbsl.digitallibraray.Activities.Dashboard
+import com.wbsl.digitallibraray.R
 
 class VerifyOtp : AppCompatActivity() {
 
@@ -111,6 +111,7 @@ class VerifyOtp : AppCompatActivity() {
                                 // User phone number already exists, no need to update details
                                 // Launch Dashboard activity directly
                                 val i = Intent(this@VerifyOtp, Dashboard::class.java)
+                                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(i)
                                 finish()
                             } else {
@@ -132,6 +133,7 @@ class VerifyOtp : AppCompatActivity() {
                                         lottie.addAnimatorListener(object : AnimatorListenerAdapter() {
                                             override fun onAnimationEnd(animation: Animator) {
                                                 val i = Intent(this@VerifyOtp, Dashboard::class.java)
+                                                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                 startActivity(i)
                                                 finish()
                                             }

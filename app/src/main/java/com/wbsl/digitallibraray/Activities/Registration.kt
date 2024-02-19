@@ -1,4 +1,4 @@
-package com.wbsl.digitallibraray
+package com.wbsl.digitallibraray.Activities
 
 import android.Manifest
 import android.content.Context
@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.wbsl.digitallibraray.R
 import java.io.IOException
 import java.util.Locale
 

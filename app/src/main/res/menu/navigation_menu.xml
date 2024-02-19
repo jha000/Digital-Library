@@ -7,6 +7,12 @@
         android:id="@+id/home"
         />
 
+    <item android:title="Search"
+        android:icon="@drawable/search"
+        android:id="@+id/search"
+        android:iconTint="@color/black"
+        />
+
     <item android:title="Catalogue"
         android:icon="@drawable/category"
         android:id="@+id/catalogue"

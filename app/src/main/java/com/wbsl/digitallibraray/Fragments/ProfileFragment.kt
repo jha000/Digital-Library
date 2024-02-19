@@ -1,25 +1,34 @@
 package com.wbsl.digitallibraray.Fragments
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.airbnb.lottie.LottieAnimationView
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.wbsl.digitallibraray.EditProfile
-import com.wbsl.digitallibraray.LogIn
+import com.wbsl.digitallibraray.Activities.EditProfile
+import com.wbsl.digitallibraray.Activities.LogIn
+import com.wbsl.digitallibraray.Activities.Registration
 import com.wbsl.digitallibraray.R
-import com.wbsl.digitallibraray.Registration
+import java.io.ByteArrayOutputStream
 
 class profileFragment : Fragment() {
 
@@ -45,6 +54,29 @@ class profileFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        val cover = view.findViewById<View>(R.id.profile_image) as ImageView
+
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("myKey", Context.MODE_PRIVATE)
+
+        val base64: String? = sharedPreferences.getString("image", null)
+        if (base64 != null && base64.isNotEmpty()) {
+            val byteArray = Base64.decode(base64, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            cover.setImageBitmap(bitmap)
+        }
+
+        cover.setOnClickListener {
+            ImagePicker.with(this@profileFragment)
+                .crop()
+                .compress(1024)
+                .maxResultSize(
+                    1080,
+                    1080
+                )
+                .start()
+        }
 
         signUp = view.findViewById(R.id.signUp)
         logIn = view.findViewById(R.id.logIn)
@@ -150,6 +182,31 @@ class profileFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            val selectedImg = data!!.data
+            val cover = view?.findViewById<View>(R.id.profile_image) as ImageView
+            cover.setImageURI(selectedImg)
+
+            val drawable = cover.drawable
+            if (drawable != null && drawable is BitmapDrawable) {
+                val bitmap = drawable.bitmap
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val byteArray = byteArrayOutputStream.toByteArray()
+                val base64 = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+                val sharedPreferences = requireActivity().getSharedPreferences("myKey", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString("image", base64)
+                editor.apply()
+            } else {
+                // Handle the case where the drawable is null or not a BitmapDrawable
+            }
+        }
     }
 
 }
