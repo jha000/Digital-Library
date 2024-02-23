@@ -1,20 +1,26 @@
 package com.wbsl.digitallibraray.Activities
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.github.barteksc.pdfviewer.PDFView
+import androidx.core.widget.NestedScrollView
+import com.razorpay.Checkout
+import com.razorpay.PaymentResultListener
 import com.squareup.picasso.Picasso
 import com.wbsl.digitallibraray.R
+import org.json.JSONException
+import org.json.JSONObject
 
-class OpenBook : AppCompatActivity() {
+class OpenBook : AppCompatActivity(), PaymentResultListener {
 
-    lateinit var pdfView: PDFView
+    private lateinit var scrollLayout: NestedScrollView
+    private lateinit var failureLayout: LinearLayout
+    private lateinit var successLayout: LinearLayout
+    private lateinit var downLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +28,17 @@ class OpenBook : AppCompatActivity() {
 
         val back = findViewById<ImageView>(R.id.back)
         val back1 = findViewById<TextView>(R.id.back1)
+        val cancel = findViewById<TextView>(R.id.cancel)
+        val back2 = findViewById<TextView>(R.id.back2)
+        val tryAgain = findViewById<Button>(R.id.tryAgain)
+        val view = findViewById<Button>(R.id.view)
+        val open = findViewById<LinearLayout>(R.id.open)
+        val progressbar = findViewById<LinearLayout>(R.id.progressbar)
+
+        scrollLayout = findViewById(R.id.scrollLayout)
+        failureLayout = findViewById(R.id.failureLayout)
+        successLayout = findViewById(R.id.successLayout)
+        downLayout = findViewById(R.id.down)
 
         back.setOnClickListener(View.OnClickListener {
             super.onBackPressed()
@@ -30,6 +47,27 @@ class OpenBook : AppCompatActivity() {
         back1.setOnClickListener(View.OnClickListener {
             super.onBackPressed()
         })
+
+        back2.setOnClickListener(View.OnClickListener {
+            super.onBackPressed()
+        })
+
+        cancel.setOnClickListener {
+            super.onBackPressed()
+        }
+
+        view.setOnClickListener {
+            super.onBackPressed()
+        }
+
+        tryAgain.setOnClickListener {
+            failureLayout.visibility = View.GONE
+            scrollLayout.visibility = View.VISIBLE
+            downLayout.visibility = View.VISIBLE
+
+            progressbar.visibility = View.GONE
+            open.visibility = View.VISIBLE
+        }
 
         // Retrieve data from intent
         val intent = intent
@@ -51,19 +89,63 @@ class OpenBook : AppCompatActivity() {
         val getPages = findViewById<TextView>(R.id.getPages)
         val getYear = findViewById<TextView>(R.id.getYear)
         val getSubject = findViewById<TextView>(R.id.subject)
-        val open = findViewById<LinearLayout>(R.id.show)
-
 
         open.setOnClickListener {
-            // Check if the link is not null or empty
-            if (!link.isNullOrBlank()) {
-                // Create an Intent with the ACTION_VIEW action
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+            progressbar!!.visibility = View.VISIBLE
+            open.visibility = View.GONE
 
-                // Start the activity (open the link)
-                startActivity(intent)
+
+            val samount = "1"
+            val amountFinal = (samount.toFloat() * 100)
+
+            val checkout = Checkout()
+
+            checkout.setKeyID("rzp_live_3B17Ixk1cDL2Zz")
+
+            checkout.setImage(R.mipmap.ic_launcher)
+
+            val `object` = JSONObject()
+            try {
+                // to put name
+                `object`.put("name", "Digital Library")
+
+                // put description
+                `object`.put("description", "Digital Library")
+
+                // to set theme color
+                `object`.put("theme.color", "#274472")
+
+                // put the currency
+                `object`.put("currency", "INR")
+
+                // put amount
+                `object`.put("amount", amountFinal)
+
+                // put mobile number
+                `object`.put("prefill.contact", "")
+
+                // put email
+                `object`.put("prefill.email", "")
+
+                // open razorpay to checkout activity
+                checkout.open(this@OpenBook, `object`)
+
+            } catch (e: JSONException) {
+                e.printStackTrace()
             }
         }
+
+
+//        open.setOnClickListener {
+//            // Check if the link is not null or empty
+//            if (!link.isNullOrBlank()) {
+//                // Create an Intent with the ACTION_VIEW action
+//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+//
+//                // Start the activity (open the link)
+//                startActivity(intent)
+//            }
+//        }
 
         // Set data to views
         getTitle.text = bookTitle
@@ -75,6 +157,23 @@ class OpenBook : AppCompatActivity() {
 
         // Load image using Picasso
         Picasso.get().load(bookMedia).into(getMedia)
+
+    }
+
+
+    override fun onPaymentSuccess(p0: String?) {
+
+        scrollLayout.visibility = View.GONE
+        downLayout.visibility = View.GONE
+        successLayout.visibility = View.VISIBLE
+
+    }
+
+    override fun onPaymentError(p0: Int, p1: String?) {
+
+        scrollLayout.visibility = View.GONE
+        downLayout.visibility = View.GONE
+        failureLayout.visibility = View.VISIBLE
 
     }
 }

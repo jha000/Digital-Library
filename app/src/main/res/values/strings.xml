@@ -2,5 +2,4 @@
     <string name="app_name">Digital Libraray</string>
     <string name="manually"><u>Enter address manually</u></string>
     <string name="resendOtp"><u>Resend Code</u></string>
-    <!-- TODO: Remove or change this placeholder text -->
 </resources>

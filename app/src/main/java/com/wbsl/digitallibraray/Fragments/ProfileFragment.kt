@@ -60,13 +60,6 @@ class profileFragment : Fragment() {
         val sharedPreferences =
             requireActivity().getSharedPreferences("myKey", Context.MODE_PRIVATE)
 
-        val base64: String? = sharedPreferences.getString("image", null)
-        if (base64 != null && base64.isNotEmpty()) {
-            val byteArray = Base64.decode(base64, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-            cover.setImageBitmap(bitmap)
-        }
-
         cover.setOnClickListener {
             ImagePicker.with(this@profileFragment)
                 .crop()
@@ -136,6 +129,14 @@ class profileFragment : Fragment() {
                             } else {
                                 "$address1, $state"
                             }
+
+                            val base64: String? = sharedPreferences.getString("image", null)
+                            if (base64 != null && base64.isNotEmpty()) {
+                                val byteArray = Base64.decode(base64, Base64.DEFAULT)
+                                val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                                cover.setImageBitmap(bitmap)
+                            }
+
                             profileLayout.visibility = View.VISIBLE
                             authLayout.visibility = View.GONE
                             profileLoading.visibility = View.GONE
